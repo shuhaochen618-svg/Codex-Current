@@ -2,6 +2,8 @@
 "app.subtitle" = "Local Codex overview";
 "action.show" = "Show Dashboard";
 "action.hide" = "Hide Dashboard";
+"action.collapse_dashboard" = "Collapse dashboard";
+"action.expand_dashboard" = "Expand dashboard";
 "action.refresh" = "Refresh";
 "action.settings" = "Customize";
 "action.quit" = "Quit";

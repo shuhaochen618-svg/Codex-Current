@@ -15,4 +15,7 @@ swiftc \
   -o "$test_dir/CodexCurrentSelfTest"
 
 "$test_dir/CodexCurrentSelfTest"
-swift build --package-path "$project_dir"
+
+if [ "${1:-}" != "--self-tests-only" ]; then
+  swift build --package-path "$project_dir"
+fi

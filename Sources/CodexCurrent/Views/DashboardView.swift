@@ -1,50 +1,72 @@
 import SwiftUI
 
+@MainActor
+final class DashboardPresentationState: ObservableObject {
+    @Published var isCollapsed = false
+}
+
 struct DashboardView: View {
     @ObservedObject var model: AppModel
     @ObservedObject private var preferences: WidgetPreferences
-    private let onPreferredHeightChange: (CGFloat) -> Void
+    @ObservedObject private var presentation: DashboardPresentationState
+    private let onToggleCollapsed: () -> Void
+    private let onLayoutChange: (DashboardLayoutMeasurement) -> Void
 
     init(
         model: AppModel,
-        onPreferredHeightChange: @escaping (CGFloat) -> Void = { _ in }
+        presentation: DashboardPresentationState,
+        onToggleCollapsed: @escaping () -> Void,
+        onLayoutChange: @escaping (DashboardLayoutMeasurement) -> Void = { _ in }
     ) {
         self.model = model
-        self.onPreferredHeightChange = onPreferredHeightChange
+        _presentation = ObservedObject(wrappedValue: presentation)
+        self.onToggleCollapsed = onToggleCollapsed
+        self.onLayoutChange = onLayoutChange
         _preferences = ObservedObject(wrappedValue: model.preferences)
     }
 
     var body: some View {
         VStack(spacing: 0) {
             header.reportDashboardHeight()
-            Divider().opacity(0.45)
 
-            ScrollView {
-                VStack(spacing: 12) {
-                    ForEach(preferences.visibleWidgets) { kind in
-                        WidgetCardView(
-                            kind: kind,
-                            model: model,
-                            density: preferences.density
-                        )
+            if !presentation.isCollapsed {
+                Divider().opacity(0.45)
+
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(preferences.visibleWidgets) { kind in
+                            WidgetCardView(
+                                kind: kind,
+                                model: model,
+                                density: preferences.density
+                            )
+                        }
                     }
+                    .padding(16)
+                    .reportDashboardHeight()
                 }
-                .padding(16)
-                .reportDashboardHeight()
-            }
 
-            Divider().opacity(0.45)
-            footer.reportDashboardHeight()
+                Divider().opacity(0.45)
+                footer.reportDashboardHeight()
+            }
         }
         .frame(
             minWidth: 360,
             idealWidth: 420,
-            minHeight: DashboardSizing.minimumHeight
+            minHeight: DashboardSizing.minimumHeight(
+                isCollapsed: presentation.isCollapsed
+            )
         )
         .background(.ultraThinMaterial)
         .onPreferenceChange(DashboardMeasuredHeightKey.self) { measuredHeight in
             guard measuredHeight > 0 else { return }
-            onPreferredHeightChange(ceil(measuredHeight) + 2)
+            onLayoutChange(
+                DashboardLayoutMeasurement(
+                    contentHeight: ceil(measuredHeight)
+                        + (presentation.isCollapsed ? 0 : 2),
+                    isCollapsed: presentation.isCollapsed
+                )
+            )
         }
     }
 
@@ -65,6 +87,26 @@ struct DashboardView: View {
             }
 
             Spacer()
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    onToggleCollapsed()
+                }
+            } label: {
+                Image(
+                    systemName: presentation.isCollapsed
+                        ? "rectangle.expand.vertical"
+                        : "rectangle.compress.vertical"
+                )
+            }
+            .buttonStyle(.plain)
+            .help(
+                L10n.text(
+                    presentation.isCollapsed
+                        ? "action.expand_dashboard"
+                        : "action.collapse_dashboard"
+                )
+            )
 
             Button {
                 Task { await model.refresh() }

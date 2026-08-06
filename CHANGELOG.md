@@ -9,6 +9,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Changed
 
 - Made the floating dashboard follow the measured height of its visible components, including live growth and shrinkage when task details are expanded or collapsed, with screen-aware height limits.
+- Added a one-click compact dashboard mode and pinned CI to Xcode 16.2 with separately reported self-test and package-build steps.
 
 ## [1.0.0] - 2026-08-06
 

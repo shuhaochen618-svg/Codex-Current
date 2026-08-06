@@ -7,8 +7,11 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
     @Published private(set) var isVisible = false
 
     private let model: AppModel
+    private let presentation = DashboardPresentationState()
     private var panel: NSPanel?
-    private var preferredContentHeight: CGFloat?
+    private var collapsedLayout: DashboardLayoutMeasurement?
+    private var expandedLayout: DashboardLayoutMeasurement?
+    private var suppressExpandedMeasurements = false
     private var cancellables: Set<AnyCancellable> = []
 
     init(model: AppModel) {
@@ -44,8 +47,8 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
     }
 
     func windowDidChangeScreen(_ notification: Notification) {
-        guard let preferredContentHeight else { return }
-        resizeForContentHeight(preferredContentHeight, animate: false)
+        guard let layout = currentLayout else { return }
+        resizeForLayout(layout, animate: false)
     }
 
     private func makePanel() -> NSPanel {
@@ -65,13 +68,22 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.backgroundColor = .clear
         panel.isOpaque = false
-        panel.minSize = NSSize(width: 350, height: DashboardSizing.minimumHeight)
+        panel.minSize = NSSize(
+            width: 350,
+            height: DashboardSizing.expandedMinimumHeight
+        )
         panel.maxSize = NSSize(width: 560, height: DashboardSizing.maximumHeight)
         panel.delegate = self
         panel.contentView = NSHostingView(
-            rootView: DashboardView(model: model) { [weak self] preferredHeight in
+            rootView: DashboardView(
+                model: model,
+                presentation: presentation,
+                onToggleCollapsed: { [weak self] in
+                    self?.toggleDashboardCollapsed()
+                }
+            ) { [weak self] layout in
                 Task { @MainActor [weak self] in
-                    self?.resizeForContentHeight(preferredHeight)
+                    self?.resizeForLayout(layout)
                 }
             }
         )
@@ -84,17 +96,32 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
         panel?.level = isPinned ? .floating : .normal
     }
 
-    private func resizeForContentHeight(
-        _ contentHeight: CGFloat,
-        animate: Bool = true
+    private func resizeForLayout(
+        _ layout: DashboardLayoutMeasurement,
+        animate: Bool = true,
+        bypassSuppression: Bool = false
     ) {
         guard let panel else { return }
-        preferredContentHeight = contentHeight
+        if !layout.isCollapsed, suppressExpandedMeasurements, !bypassSuppression {
+            return
+        }
+        if layout.isCollapsed {
+            collapsedLayout = layout
+        } else {
+            expandedLayout = layout
+        }
+        guard layout.isCollapsed == presentation.isCollapsed else { return }
+
+        panel.minSize = NSSize(
+            width: panel.minSize.width,
+            height: DashboardSizing.minimumHeight(isCollapsed: layout.isCollapsed)
+        )
         let availableHeight = (panel.screen ?? NSScreen.main)?.visibleFrame.height
             ?? DashboardSizing.maximumHeight
         let targetHeight = DashboardSizing.panelHeight(
-            contentHeight: contentHeight,
-            availableScreenHeight: availableHeight
+            contentHeight: layout.contentHeight,
+            availableScreenHeight: availableHeight,
+            isCollapsed: layout.isCollapsed
         )
         guard abs(panel.frame.height - targetHeight) >= 0.5 else { return }
 
@@ -103,6 +130,57 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
             targetHeight: targetHeight,
             preferredTop: panel.frame.maxY,
             animate: animate && panel.isVisible
+        )
+    }
+
+    private var currentLayout: DashboardLayoutMeasurement? {
+        presentation.isCollapsed ? collapsedLayout : expandedLayout
+    }
+
+    private func toggleDashboardCollapsed() {
+        let isCollapsed = !presentation.isCollapsed
+        if isCollapsed {
+            suppressExpandedMeasurements = false
+            presentation.isCollapsed = true
+            applyCollapsedState(true)
+        } else {
+            presentation.isCollapsed = false
+            suppressExpandedMeasurements = true
+            applyCollapsedState(false, animate: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                guard let self, !self.presentation.isCollapsed else { return }
+                if let expandedLayout = self.expandedLayout {
+                    self.resizeForLayout(
+                        expandedLayout,
+                        bypassSuppression: true
+                    )
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+                guard let self, !self.presentation.isCollapsed else { return }
+                self.suppressExpandedMeasurements = false
+            }
+        }
+    }
+
+    private func applyCollapsedState(
+        _ isCollapsed: Bool,
+        animate: Bool = true
+    ) {
+        let fallbackHeight = DashboardSizing.minimumHeight(isCollapsed: isCollapsed)
+        let layout = isCollapsed
+            ? collapsedLayout ?? DashboardLayoutMeasurement(
+                contentHeight: fallbackHeight,
+                isCollapsed: true
+            )
+            : expandedLayout ?? DashboardLayoutMeasurement(
+                contentHeight: fallbackHeight,
+                isCollapsed: false
+            )
+        resizeForLayout(
+            layout,
+            animate: animate,
+            bypassSuppression: true
         )
     }
 

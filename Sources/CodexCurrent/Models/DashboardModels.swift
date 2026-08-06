@@ -46,19 +46,31 @@ enum TaskDetailsSizing {
 }
 
 enum DashboardSizing {
-    static let minimumHeight: CGFloat = 320
+    static let collapsedMinimumHeight: CGFloat = 60
+    static let expandedMinimumHeight: CGFloat = 320
     static let maximumHeight: CGFloat = 900
+
+    static func minimumHeight(isCollapsed: Bool) -> CGFloat {
+        isCollapsed ? collapsedMinimumHeight : expandedMinimumHeight
+    }
 
     static func panelHeight(
         contentHeight: CGFloat,
-        availableScreenHeight: CGFloat
+        availableScreenHeight: CGFloat,
+        isCollapsed: Bool
     ) -> CGFloat {
+        let minimumHeight = minimumHeight(isCollapsed: isCollapsed)
         let upperBound = min(
             maximumHeight,
             max(availableScreenHeight, minimumHeight)
         )
         return min(max(contentHeight, minimumHeight), upperBound)
     }
+}
+
+struct DashboardLayoutMeasurement: Equatable {
+    let contentHeight: CGFloat
+    let isCollapsed: Bool
 }
 
 enum DataQuality: String, Codable, Sendable {

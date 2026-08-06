@@ -2,6 +2,8 @@
 "app.subtitle" = "本地 Codex 状态概览";
 "action.show" = "显示浮窗";
 "action.hide" = "隐藏浮窗";
+"action.collapse_dashboard" = "收起浮窗";
+"action.expand_dashboard" = "展开浮窗";
 "action.refresh" = "刷新";
 "action.settings" = "自定义";
 "action.quit" = "退出";

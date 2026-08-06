@@ -288,23 +288,34 @@ struct SelfTestRunner {
         try require(
             DashboardSizing.panelHeight(
                 contentHeight: 240,
-                availableScreenHeight: 1_000
+                availableScreenHeight: 1_000,
+                isCollapsed: false
             ) == 320,
             "Short content should respect the panel minimum height"
         )
         try require(
             DashboardSizing.panelHeight(
                 contentHeight: 720,
-                availableScreenHeight: 1_000
+                availableScreenHeight: 1_000,
+                isCollapsed: false
             ) == 720,
             "The outer panel should follow the measured component height"
         )
         try require(
             DashboardSizing.panelHeight(
                 contentHeight: 1_200,
-                availableScreenHeight: 780
+                availableScreenHeight: 780,
+                isCollapsed: false
             ) == 780,
             "Tall content should stay within the current screen"
+        )
+        try require(
+            DashboardSizing.panelHeight(
+                contentHeight: 48,
+                availableScreenHeight: 1_000,
+                isCollapsed: true
+            ) == 60,
+            "Collapsed mode should reduce the dashboard to a compact status bar"
         )
     }
 
