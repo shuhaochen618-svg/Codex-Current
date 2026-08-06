@@ -1,0 +1,33 @@
+name: Feature request
+description: Propose a focused improvement that preserves the local-first data contract.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: What decision or workflow is difficult today?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe the result, not only a UI control.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Proposed data source and quality label
+      description: Explain whether the result is Official, Local, Estimated, Beta, or Unavailable and why.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product-boundary check
+      options:
+        - label: This proposal does not require credential scraping, prompt uploading, or false-precision quota conversion.
+          required: true

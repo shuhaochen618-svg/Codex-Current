@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible defect without sharing private account or task data.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, authentication files, full prompts, conversation content, VPN subscription URLs, selected node names, or account identity.
+  - type: input
+    id: version
+    attributes:
+      label: Codex Current version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac architecture
+      placeholder: macOS 14.6, Apple silicon
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Codex limits or reset timeline
+        - Usage activity or estimate
+        - Task activity (Beta)
+        - VPN / Proxy
+        - Floating window or settings
+        - Build or packaging
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use sanitized or fictional values.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed credentials, identity, prompts, conversations, VPN secrets, and private node names.
+          required: true

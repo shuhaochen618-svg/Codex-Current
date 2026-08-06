@@ -1,0 +1,167 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description">
+  <title id="title">Codex Current V1.0 product preview</title>
+  <desc id="description">An illustrative macOS dashboard preview using fictional quota, task, and VPN data.</desc>
+  <defs>
+    <linearGradient id="background" x1="80" y1="40" x2="1360" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11182C"/>
+      <stop offset="0.5" stop-color="#171331"/>
+      <stop offset="1" stop-color="#0A1020"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientTransform="translate(390 260) rotate(35) scale(560 460)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7C3AED" stop-opacity="0.36"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientTransform="translate(1180 740) rotate(-145) scale(450 360)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="856" y1="84" x2="1216" y2="810" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F8FC" stop-opacity="0.98"/>
+      <stop offset="1" stop-color="#ECECF5" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="quota" x1="848" y1="244" x2="1214" y2="244" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#6D5CE8"/>
+    </linearGradient>
+    <filter id="shadow" x="740" y="20" width="660" height="860" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="28" stdDeviation="34" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="900" rx="28" fill="url(#background)"/>
+  <rect width="1440" height="900" rx="28" fill="url(#glowA)"/>
+  <rect width="1440" height="900" rx="28" fill="url(#glowB)"/>
+
+  <g opacity="0.18">
+    <path d="M96 736H654" stroke="#C4B5FD" stroke-width="1"/>
+    <path d="M96 766H580" stroke="#C4B5FD" stroke-width="1"/>
+    <path d="M96 796H622" stroke="#C4B5FD" stroke-width="1"/>
+  </g>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <g transform="translate(100 94)">
+      <rect width="56" height="56" rx="16" fill="#8B5CF6" fill-opacity="0.18" stroke="#A78BFA" stroke-opacity="0.45"/>
+      <path d="M15 30H21L25 20L31 39L35 27L39 30H43" stroke="#C4B5FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="72" y="38" fill="#F8FAFC" font-size="31" font-weight="700" letter-spacing="-0.5">Codex Current</text>
+    </g>
+
+    <text x="100" y="242" fill="#F8FAFC" font-size="62" font-weight="720" letter-spacing="-2.2">Your Codex health,</text>
+    <text x="100" y="310" fill="#C4B5FD" font-size="62" font-weight="720" letter-spacing="-2.2">at a glance.</text>
+    <text x="102" y="368" fill="#AAB2C8" font-size="22" font-weight="430">Quota, active tasks, and VPN health in one</text>
+    <text x="102" y="400" fill="#AAB2C8" font-size="22" font-weight="430">native, local-first macOS dashboard.</text>
+
+    <g transform="translate(100 466)">
+      <rect width="118" height="38" rx="19" fill="#143424" stroke="#276A48"/>
+      <circle cx="21" cy="19" r="5" fill="#4ADE80"/>
+      <text x="34" y="25" fill="#BBF7D0" font-size="15" font-weight="650">Official</text>
+
+      <rect x="132" width="130" height="38" rx="19" fill="#3A2915" stroke="#7C5423"/>
+      <circle cx="153" cy="19" r="5" fill="#FBBF24"/>
+      <text x="166" y="25" fill="#FDE68A" font-size="15" font-weight="650">Estimated</text>
+
+      <rect x="276" width="92" height="38" rx="19" fill="#142D4B" stroke="#245A91"/>
+      <circle cx="297" cy="19" r="5" fill="#60A5FA"/>
+      <text x="310" y="25" fill="#BFDBFE" font-size="15" font-weight="650">Beta</text>
+
+      <rect x="382" width="102" height="38" rx="19" fill="#143424" stroke="#276A48"/>
+      <circle cx="403" cy="19" r="5" fill="#4ADE80"/>
+      <text x="416" y="25" fill="#BBF7D0" font-size="15" font-weight="650">Local</text>
+    </g>
+
+    <g transform="translate(100 556)">
+      <circle cx="12" cy="12" r="12" fill="#8B5CF6" fill-opacity="0.2"/>
+      <path d="M7 12.2L10.3 15.5L17.2 8.5" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="36" y="19" fill="#D6DBE8" font-size="19" font-weight="540">Official limits and reset times</text>
+
+      <circle cx="12" cy="62" r="12" fill="#8B5CF6" fill-opacity="0.2"/>
+      <path d="M7 62.2L10.3 65.5L17.2 58.5" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="36" y="69" fill="#D6DBE8" font-size="19" font-weight="540">Live Codex Desktop task context</text>
+
+      <circle cx="12" cy="112" r="12" fill="#8B5CF6" fill-opacity="0.2"/>
+      <path d="M7 112.2L10.3 115.5L17.2 108.5" stroke="#C4B5FD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="36" y="119" fill="#D6DBE8" font-size="19" font-weight="540">On-device processing and history</text>
+    </g>
+
+    <text x="102" y="834" fill="#747F99" font-size="15" font-weight="520" letter-spacing="0.4">V1.0 PRODUCT PREVIEW · FICTIONAL DEMO DATA</text>
+
+    <g filter="url(#shadow)">
+      <rect x="768" y="58" width="574" height="784" rx="28" fill="url(#panel)" stroke="#FFFFFF" stroke-opacity="0.72"/>
+      <rect x="769" y="59" width="572" height="54" rx="27" fill="#FFFFFF" fill-opacity="0.24"/>
+      <circle cx="795" cy="85" r="6" fill="#FF5F57"/>
+      <circle cx="815" cy="85" r="6" fill="#FEBC2E"/>
+      <circle cx="835" cy="85" r="6" fill="#28C840"/>
+
+      <g transform="translate(798 132)">
+        <rect width="42" height="42" rx="12" fill="#8B5CF6" fill-opacity="0.14"/>
+        <path d="M10 23H15L19 14L24 31L28 20L32 23H34" stroke="#7C3AED" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="56" y="18" fill="#171A24" font-size="19" font-weight="700">Codex Current</text>
+        <text x="56" y="38" fill="#74788A" font-size="13" font-weight="500">Local Codex overview</text>
+        <circle cx="485" cy="21" r="15" fill="#FFFFFF" fill-opacity="0.72"/>
+        <path d="M480 21A5 5 0 1 0 482 17" stroke="#656A7B" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M482 14V18H478" stroke="#656A7B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+
+      <g transform="translate(798 196)">
+        <rect width="514" height="170" rx="18" fill="#FFFFFF" fill-opacity="0.82" stroke="#D8D9E4"/>
+        <rect x="16" y="16" width="32" height="32" rx="9" fill="#22C55E" fill-opacity="0.12"/>
+        <path d="M24 36V29M31.5 36V24M39 36V19" stroke="#16A34A" stroke-width="2.3" stroke-linecap="round"/>
+        <text x="60" y="37" fill="#262936" font-size="16" font-weight="700">Codex limits</text>
+        <rect x="420" y="18" width="76" height="26" rx="13" fill="#DCFCE7"/>
+        <text x="436" y="36" fill="#15803D" font-size="12" font-weight="700">Official</text>
+
+        <text x="18" y="79" fill="#737789" font-size="13" font-weight="560">5-hour window</text>
+        <text x="445" y="80" fill="#242733" font-size="18" font-weight="730">78% left</text>
+        <rect x="18" y="94" width="478" height="8" rx="4" fill="#E2E3EC"/>
+        <rect x="18" y="94" width="373" height="8" rx="4" fill="url(#quota)"/>
+        <text x="18" y="127" fill="#737789" font-size="12" font-weight="500">22% used</text>
+        <text x="423" y="127" fill="#737789" font-size="12" font-weight="500">Resets 18:30</text>
+        <path d="M18 144H496" stroke="#E5E5ED"/>
+        <text x="18" y="162" fill="#737789" font-size="12" font-weight="540">7-day window</text>
+        <text x="445" y="162" fill="#242733" font-size="14" font-weight="680">91% left</text>
+      </g>
+
+      <g transform="translate(798 382)">
+        <rect width="514" height="196" rx="18" fill="#FFFFFF" fill-opacity="0.82" stroke="#D8D9E4"/>
+        <rect x="16" y="16" width="32" height="32" rx="9" fill="#3B82F6" fill-opacity="0.12"/>
+        <path d="M24 32H29L32 24L36 40L39 32H42" stroke="#2563EB" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="60" y="37" fill="#262936" font-size="16" font-weight="700">Task activity</text>
+        <rect x="438" y="18" width="58" height="26" rx="13" fill="#DBEAFE"/>
+        <text x="452" y="36" fill="#1D4ED8" font-size="12" font-weight="700">Beta</text>
+
+        <circle cx="28" cy="76" r="5" fill="#22C55E"/>
+        <text x="44" y="82" fill="#242733" font-size="17" font-weight="700">2 active</text>
+        <text x="409" y="81" fill="#737789" font-size="13" font-weight="540">18.4k tokens</text>
+
+        <rect x="18" y="102" width="478" height="34" rx="9" fill="#F4F4F8"/>
+        <text x="30" y="124" fill="#343745" font-size="13" font-weight="600">Refine release documentation</text>
+        <text x="389" y="124" fill="#74788A" font-size="12" font-weight="520">gpt-5 · 12m</text>
+
+        <rect x="18" y="144" width="478" height="34" rx="9" fill="#F4F4F8"/>
+        <text x="30" y="166" fill="#343745" font-size="13" font-weight="600">Verify macOS build</text>
+        <text x="389" y="166" fill="#74788A" font-size="12" font-weight="520">gpt-5 · 4m</text>
+      </g>
+
+      <g transform="translate(798 594)">
+        <rect width="514" height="158" rx="18" fill="#FFFFFF" fill-opacity="0.82" stroke="#D8D9E4"/>
+        <rect x="16" y="16" width="32" height="32" rx="9" fill="#22C55E" fill-opacity="0.12"/>
+        <path d="M23 33C28 27 36 27 41 33M27 37C31 33 35 33 38 37M32 41H32.1" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round"/>
+        <text x="60" y="37" fill="#262936" font-size="16" font-weight="700">VPN / Proxy</text>
+        <rect x="420" y="18" width="76" height="26" rx="13" fill="#DCFCE7"/>
+        <text x="443" y="36" fill="#15803D" font-size="12" font-weight="700">Local</text>
+
+        <circle cx="26" cy="78" r="6" fill="#22C55E"/>
+        <text x="42" y="84" fill="#242733" font-size="17" font-weight="700">VPN connected</text>
+        <text x="427" y="83" fill="#15803D" font-size="14" font-weight="680">42 ms</text>
+        <path d="M18 104H496" stroke="#E5E5ED"/>
+        <text x="18" y="132" fill="#737789" font-size="12" font-weight="540">Rule mode · System proxy enabled</text>
+        <text x="424" y="132" fill="#737789" font-size="12" font-weight="540">Healthy</text>
+      </g>
+
+      <g transform="translate(798 778)">
+        <path d="M3 9V6.5A5.5 5.5 0 0 1 14 6.5V9M1 9H16V20H1V9Z" stroke="#74788A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="26" y="17" fill="#74788A" font-size="12" font-weight="560">Local only</text>
+        <text x="393" y="17" fill="#74788A" font-size="12" font-weight="520">Updated just now</text>
+      </g>
+    </g>
+  </g>
+</svg>
