@@ -92,10 +92,15 @@ struct DashboardView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text(L10n.text("app.name"))
                     .font(.headline)
-                Text(L10n.text("app.subtitle"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if presentation.isCollapsed {
+                    compactMetrics
+                } else {
+                    Text(L10n.text("app.subtitle"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
+            .layoutPriority(1)
 
             Spacer()
 
@@ -148,6 +153,73 @@ struct DashboardView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 13)
+    }
+
+    private var compactMetrics: some View {
+        HStack(spacing: 9) {
+            compactMetric(
+                systemImage: "gauge.with.dots.needle.50percent",
+                value: compactRemainingPercent.map { "\($0)%" } ?? "—",
+                color: compactRemainingPercent.map(compactLimitColor) ?? .secondary,
+                help: L10n.text("widget.limits")
+            )
+            compactMetric(
+                systemImage: "bolt.horizontal.circle.fill",
+                value: compactActiveTasks.map(String.init) ?? "—",
+                color: compactActiveTasks.map { $0 > 0 ? .green : .secondary } ?? .secondary,
+                help: L10n.text("widget.tasks")
+            )
+            compactMetric(
+                systemImage: "network",
+                value: compactVPNLatency.map { "\($0) ms" } ?? "—",
+                color: compactVPNLatency.map(compactLatencyColor) ?? .secondary,
+                help: L10n.text("widget.vpn")
+            )
+        }
+        .font(.caption2.monospacedDigit().weight(.semibold))
+        .lineLimit(1)
+    }
+
+    private func compactMetric(
+        systemImage: String,
+        value: String,
+        color: Color,
+        help: String
+    ) -> some View {
+        HStack(spacing: 3) {
+            Image(systemName: systemImage)
+                .foregroundStyle(color)
+            Text(value)
+                .foregroundStyle(.primary)
+        }
+        .help(help)
+    }
+
+    private var compactRemainingPercent: Int? {
+        guard case let .loaded(windows, _) = model.limits else { return nil }
+        return windows.dashboardWindows.first?.remainingPercent
+    }
+
+    private var compactActiveTasks: Int? {
+        guard case let .loaded(tasks, _) = model.tasks else { return nil }
+        return tasks.active
+    }
+
+    private var compactVPNLatency: Int? {
+        guard case let .loaded(snapshot, _) = model.vpn else { return nil }
+        return snapshot.latencyMilliseconds
+    }
+
+    private func compactLimitColor(_ remaining: Int) -> Color {
+        if remaining <= 10 { return .red }
+        if remaining <= 25 { return .orange }
+        return .purple
+    }
+
+    private func compactLatencyColor(_ latency: Int) -> Color {
+        if latency >= 1_000 { return .red }
+        if latency >= 500 { return .orange }
+        return .green
     }
 
     private var footer: some View {
