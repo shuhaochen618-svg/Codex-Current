@@ -40,14 +40,21 @@ struct DashboardView: View {
                                 model: model,
                                 density: preferences.density
                             )
+                            .reportDashboardHeight()
                         }
-                    }
-                    .padding(16)
-                    .reportDashboardHeight()
-                }
 
-                Divider().opacity(0.45)
-                footer.reportDashboardHeight()
+                        Divider()
+                            .opacity(0.35)
+                            .padding(.top, 2)
+                            .reportDashboardHeight()
+
+                        footer.reportDashboardHeight()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+                    .padding(.bottom, 12)
+                }
+                .scrollBounceBehavior(.basedOnSize)
             }
         }
         .frame(
@@ -63,7 +70,11 @@ struct DashboardView: View {
             onLayoutChange(
                 DashboardLayoutMeasurement(
                     contentHeight: ceil(measuredHeight)
-                        + (presentation.isCollapsed ? 0 : 2),
+                        + (presentation.isCollapsed
+                            ? 0
+                            : DashboardSizing.bodyLayoutAllowance(
+                                widgetCount: preferences.visibleWidgets.count
+                            )),
                     isCollapsed: presentation.isCollapsed
                 )
             )
@@ -151,8 +162,8 @@ struct DashboardView: View {
         }
         .font(.caption2)
         .foregroundStyle(.secondary)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 2)
+        .padding(.vertical, 4)
     }
 }
 

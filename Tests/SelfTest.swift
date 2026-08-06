@@ -286,6 +286,10 @@ struct SelfTestRunner {
             "A long task list should cap its internal detail height"
         )
         try require(
+            DashboardSizing.bodyLayoutAllowance(widgetCount: 3) == 77,
+            "Dashboard body sizing should include padding, gaps, and its header divider"
+        )
+        try require(
             DashboardSizing.panelHeight(
                 contentHeight: 240,
                 availableScreenHeight: 1_000,
@@ -296,10 +300,11 @@ struct SelfTestRunner {
         try require(
             DashboardSizing.panelHeight(
                 contentHeight: 720,
+                windowChromeHeight: 28,
                 availableScreenHeight: 1_000,
                 isCollapsed: false
-            ) == 720,
-            "The outer panel should follow the measured component height"
+            ) == 748,
+            "The outer panel should include the window chrome above its measured content"
         )
         try require(
             DashboardSizing.panelHeight(

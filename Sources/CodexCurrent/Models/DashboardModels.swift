@@ -49,13 +49,27 @@ enum DashboardSizing {
     static let collapsedMinimumHeight: CGFloat = 60
     static let expandedMinimumHeight: CGFloat = 320
     static let maximumHeight: CGFloat = 900
+    private static let bodySpacing: CGFloat = 12
+    private static let bodyTopPadding: CGFloat = 16
+    private static let bodyBottomPadding: CGFloat = 12
+    private static let headerDividerHeight: CGFloat = 1
 
     static func minimumHeight(isCollapsed: Bool) -> CGFloat {
         isCollapsed ? collapsedMinimumHeight : expandedMinimumHeight
     }
 
+    static func bodyLayoutAllowance(widgetCount: Int) -> CGFloat {
+        let bodyItemCount = max(widgetCount, 0) + 2
+        let gapCount = max(bodyItemCount - 1, 0)
+        return bodyTopPadding
+            + bodyBottomPadding
+            + CGFloat(gapCount) * bodySpacing
+            + headerDividerHeight
+    }
+
     static func panelHeight(
         contentHeight: CGFloat,
+        windowChromeHeight: CGFloat = 0,
         availableScreenHeight: CGFloat,
         isCollapsed: Bool
     ) -> CGFloat {
@@ -64,7 +78,8 @@ enum DashboardSizing {
             maximumHeight,
             max(availableScreenHeight, minimumHeight)
         )
-        return min(max(contentHeight, minimumHeight), upperBound)
+        let completeHeight = contentHeight + max(windowChromeHeight, 0)
+        return min(max(completeHeight, minimumHeight), upperBound)
     }
 }
 

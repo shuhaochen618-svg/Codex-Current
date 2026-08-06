@@ -112,16 +112,21 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
         }
         guard layout.isCollapsed == presentation.isCollapsed else { return }
 
-        panel.minSize = NSSize(
-            width: panel.minSize.width,
-            height: DashboardSizing.minimumHeight(isCollapsed: layout.isCollapsed)
-        )
         let availableHeight = (panel.screen ?? NSScreen.main)?.visibleFrame.height
             ?? DashboardSizing.maximumHeight
+        let windowChromeHeight = max(
+            panel.frame.height - panel.contentLayoutRect.height,
+            0
+        )
         let targetHeight = DashboardSizing.panelHeight(
             contentHeight: layout.contentHeight,
+            windowChromeHeight: windowChromeHeight,
             availableScreenHeight: availableHeight,
             isCollapsed: layout.isCollapsed
+        )
+        panel.minSize = NSSize(
+            width: panel.minSize.width,
+            height: targetHeight
         )
         guard abs(panel.frame.height - targetHeight) >= 0.5 else { return }
 
