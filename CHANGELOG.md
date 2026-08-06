@@ -12,6 +12,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Added a one-click compact dashboard mode and pinned CI to Xcode 16.2 with separately reported self-test and package-build steps.
 - Kept the bottom status row in the scrollable content flow and included the macOS title-bar inset in adaptive sizing, preventing the last card from being clipped by the footer.
 - Replaced the compact dashboard subtitle with live quota, active-task, and VPN-latency metrics.
+- Changed the menu-bar item to a stable Codex Current logo followed by the live remaining-quota percentage.
 
 ## [1.0.0] - 2026-08-06
 

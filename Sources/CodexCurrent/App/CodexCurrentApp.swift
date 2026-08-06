@@ -45,7 +45,14 @@ struct CodexCurrentApp: App {
         MenuBarExtra {
             MenuBarView(model: model, panel: panel)
         } label: {
-            Image(systemName: menuBarSymbol)
+            HStack(spacing: 4) {
+                Image(systemName: "waveform.path.ecg.rectangle")
+                Text(menuBarQuota)
+                    .monospacedDigit()
+            }
+            .accessibilityLabel(
+                "\(L10n.text("app.name")), \(L10n.text("widget.limits")) \(menuBarQuota)"
+            )
         }
         .menuBarExtraStyle(.window)
 
@@ -54,19 +61,15 @@ struct CodexCurrentApp: App {
         }
     }
 
-    private var menuBarSymbol: String {
+    private var menuBarQuota: String {
         switch model.limits {
         case let .loaded(windows, _):
-            guard let remaining = windows.first?.remainingPercent else {
-                return "waveform.path.ecg.rectangle"
+            guard let remaining = windows.dashboardWindows.first?.remainingPercent else {
+                return "—"
             }
-            if remaining <= 10 { return "exclamationmark.circle.fill" }
-            if remaining <= 25 { return "gauge.with.dots.needle.67percent" }
-            return "gauge.with.dots.needle.33percent"
-        case .failed:
-            return "exclamationmark.triangle"
+            return "\(remaining)%"
         default:
-            return "waveform.path.ecg.rectangle"
+            return "—"
         }
     }
 }
