@@ -3,19 +3,24 @@ import SwiftUI
 struct DashboardView: View {
     @ObservedObject var model: AppModel
     @ObservedObject private var preferences: WidgetPreferences
+    private let onPreferredHeightChange: (CGFloat) -> Void
 
-    init(model: AppModel) {
+    init(
+        model: AppModel,
+        onPreferredHeightChange: @escaping (CGFloat) -> Void = { _ in }
+    ) {
         self.model = model
+        self.onPreferredHeightChange = onPreferredHeightChange
         _preferences = ObservedObject(wrappedValue: model.preferences)
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            header
+            header.reportDashboardHeight()
             Divider().opacity(0.45)
 
             ScrollView {
-                LazyVStack(spacing: 12) {
+                VStack(spacing: 12) {
                     ForEach(preferences.visibleWidgets) { kind in
                         WidgetCardView(
                             kind: kind,
@@ -25,13 +30,22 @@ struct DashboardView: View {
                     }
                 }
                 .padding(16)
+                .reportDashboardHeight()
             }
 
             Divider().opacity(0.45)
-            footer
+            footer.reportDashboardHeight()
         }
-        .frame(minWidth: 360, idealWidth: 420, minHeight: 320, idealHeight: 620)
+        .frame(
+            minWidth: 360,
+            idealWidth: 420,
+            minHeight: DashboardSizing.minimumHeight
+        )
         .background(.ultraThinMaterial)
+        .onPreferenceChange(DashboardMeasuredHeightKey.self) { measuredHeight in
+            guard measuredHeight > 0 else { return }
+            onPreferredHeightChange(ceil(measuredHeight) + 2)
+        }
     }
 
     private var header: some View {
@@ -97,5 +111,26 @@ struct DashboardView: View {
         .foregroundStyle(.secondary)
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
+    }
+}
+
+private struct DashboardMeasuredHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value += nextValue()
+    }
+}
+
+private extension View {
+    func reportDashboardHeight() -> some View {
+        background {
+            GeometryReader { geometry in
+                Color.clear.preference(
+                    key: DashboardMeasuredHeightKey.self,
+                    value: geometry.size.height
+                )
+            }
+        }
     }
 }

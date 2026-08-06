@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+
+- Made the floating dashboard follow the measured height of its visible components, including live growth and shrinkage when task details are expanded or collapsed, with screen-aware height limits.
+
 ## [1.0.0] - 2026-08-06
 
 ### Added

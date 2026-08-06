@@ -55,7 +55,7 @@ Those signals live in different places. Codex Current brings them into a native 
 
 ### Native macOS experience
 
-- Menu-bar access and a movable, resizable, always-on-top floating panel.
+- Menu-bar access and a movable, resizable, always-on-top floating panel that adapts its height to the visible components and expanded task details.
 - Compact and expanded layouts.
 - Show, hide, and reorder built-in cards.
 - Automatic English and Simplified Chinese localization.

@@ -342,7 +342,11 @@ private struct TasksContent: View {
                                 }
                             }
                         }
-                        .frame(height: detailsHeight(taskCount: tasks.runningTasks.count))
+                        .frame(
+                            height: TaskDetailsSizing.listHeight(
+                                taskCount: tasks.runningTasks.count
+                            )
+                        )
                     }
                 }
             }
@@ -352,10 +356,16 @@ private struct TasksContent: View {
                     .foregroundStyle(.secondary)
             }
         }
+        .onChange(of: taskCount) { _, newCount in
+            if newCount == 0, showsDetails {
+                showsDetails = false
+            }
+        }
     }
 
-    private func detailsHeight(taskCount: Int) -> CGFloat {
-        min(CGFloat(taskCount) * 68, 252)
+    private var taskCount: Int {
+        guard case let .loaded(tasks, _) = state else { return 0 }
+        return tasks.runningTasks.count
     }
 }
 

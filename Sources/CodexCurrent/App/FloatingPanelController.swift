@@ -8,6 +8,7 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
 
     private let model: AppModel
     private var panel: NSPanel?
+    private var preferredContentHeight: CGFloat?
     private var cancellables: Set<AnyCancellable> = []
 
     init(model: AppModel) {
@@ -42,6 +43,11 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
         isVisible = false
     }
 
+    func windowDidChangeScreen(_ notification: Notification) {
+        guard let preferredContentHeight else { return }
+        resizeForContentHeight(preferredContentHeight, animate: false)
+    }
+
     private func makePanel() -> NSPanel {
         let panel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: 420, height: 620),
@@ -59,10 +65,16 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.backgroundColor = .clear
         panel.isOpaque = false
-        panel.minSize = NSSize(width: 350, height: 300)
-        panel.maxSize = NSSize(width: 560, height: 900)
+        panel.minSize = NSSize(width: 350, height: DashboardSizing.minimumHeight)
+        panel.maxSize = NSSize(width: 560, height: DashboardSizing.maximumHeight)
         panel.delegate = self
-        panel.contentView = NSHostingView(rootView: DashboardView(model: model))
+        panel.contentView = NSHostingView(
+            rootView: DashboardView(model: model) { [weak self] preferredHeight in
+                Task { @MainActor [weak self] in
+                    self?.resizeForContentHeight(preferredHeight)
+                }
+            }
+        )
         panel.center()
         self.panel = panel
         return panel
@@ -70,5 +82,52 @@ final class FloatingPanelController: NSObject, ObservableObject, NSWindowDelegat
 
     private func applyPinned(_ isPinned: Bool) {
         panel?.level = isPinned ? .floating : .normal
+    }
+
+    private func resizeForContentHeight(
+        _ contentHeight: CGFloat,
+        animate: Bool = true
+    ) {
+        guard let panel else { return }
+        preferredContentHeight = contentHeight
+        let availableHeight = (panel.screen ?? NSScreen.main)?.visibleFrame.height
+            ?? DashboardSizing.maximumHeight
+        let targetHeight = DashboardSizing.panelHeight(
+            contentHeight: contentHeight,
+            availableScreenHeight: availableHeight
+        )
+        guard abs(panel.frame.height - targetHeight) >= 0.5 else { return }
+
+        setPanelHeight(
+            panel,
+            targetHeight: targetHeight,
+            preferredTop: panel.frame.maxY,
+            animate: animate && panel.isVisible
+        )
+    }
+
+    private func setPanelHeight(
+        _ panel: NSPanel,
+        targetHeight: CGFloat,
+        preferredTop: CGFloat,
+        animate: Bool
+    ) {
+        let visibleFrame = (panel.screen ?? NSScreen.main)?.visibleFrame
+        let screenMaximum = visibleFrame?.height ?? panel.maxSize.height
+        let maximumHeight = min(panel.maxSize.height, screenMaximum)
+        let height = min(max(targetHeight, panel.minSize.height), maximumHeight)
+
+        var frame = panel.frame
+        frame.size.height = height
+        frame.origin.y = preferredTop - height
+
+        if let visibleFrame {
+            frame.origin.y = min(
+                max(frame.origin.y, visibleFrame.minY),
+                visibleFrame.maxY - height
+            )
+        }
+
+        panel.setFrame(frame, display: true, animate: animate)
     }
 }

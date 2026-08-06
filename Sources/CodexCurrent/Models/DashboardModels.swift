@@ -35,6 +35,32 @@ enum DashboardDensity: String, Codable, CaseIterable, Sendable {
     case expanded
 }
 
+enum TaskDetailsSizing {
+    private static let rowHeight: CGFloat = 68
+    private static let maximumListHeight: CGFloat = 252
+
+    static func listHeight(taskCount: Int) -> CGFloat {
+        guard taskCount > 0 else { return 0 }
+        return min(CGFloat(taskCount) * rowHeight, maximumListHeight)
+    }
+}
+
+enum DashboardSizing {
+    static let minimumHeight: CGFloat = 320
+    static let maximumHeight: CGFloat = 900
+
+    static func panelHeight(
+        contentHeight: CGFloat,
+        availableScreenHeight: CGFloat
+    ) -> CGFloat {
+        let upperBound = min(
+            maximumHeight,
+            max(availableScreenHeight, minimumHeight)
+        )
+        return min(max(contentHeight, minimumHeight), upperBound)
+    }
+}
+
 enum DataQuality: String, Codable, Sendable {
     case direct
     case local

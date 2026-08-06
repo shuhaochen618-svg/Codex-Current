@@ -20,9 +20,10 @@ struct SelfTestRunner {
         try testTaskBoundaryIgnoresMessageContent()
         try testRunningTaskDetailsAndTurnTokenDelta()
         try testTaskSummaryAggregatesCollapsedMetrics()
+        try testAdaptivePanelSizingAndTaskDetailCap()
         try await testHistoryStoreMergesDailyBucketsWithoutSessionContent()
         try await testHistoryStoreMigratesLegacyArchive()
-        print("CodexCurrent self-tests passed (9/9).")
+        print("CodexCurrent self-tests passed (10/10).")
     }
 
     private static func require(
@@ -269,6 +270,42 @@ struct SelfTestRunner {
         try require(summary.modelCount == 2, "Collapsed model count mismatch")
         try require(summary.totalTaskTokens == 1_000, "Collapsed token total mismatch")
         try require(summary.oldestTaskStart == older, "Collapsed longest-task start mismatch")
+    }
+
+    private static func testAdaptivePanelSizingAndTaskDetailCap() throws {
+        try require(
+            TaskDetailsSizing.listHeight(taskCount: 0) == 0,
+            "An empty task list should not request detail height"
+        )
+        try require(
+            TaskDetailsSizing.listHeight(taskCount: 1) == 68,
+            "A single task should request one row of detail height"
+        )
+        try require(
+            TaskDetailsSizing.listHeight(taskCount: 8) == 252,
+            "A long task list should cap its internal detail height"
+        )
+        try require(
+            DashboardSizing.panelHeight(
+                contentHeight: 240,
+                availableScreenHeight: 1_000
+            ) == 320,
+            "Short content should respect the panel minimum height"
+        )
+        try require(
+            DashboardSizing.panelHeight(
+                contentHeight: 720,
+                availableScreenHeight: 1_000
+            ) == 720,
+            "The outer panel should follow the measured component height"
+        )
+        try require(
+            DashboardSizing.panelHeight(
+                contentHeight: 1_200,
+                availableScreenHeight: 780
+            ) == 780,
+            "Tall content should stay within the current screen"
+        )
     }
 
     private static func testHistoryStoreMergesDailyBucketsWithoutSessionContent() async throws {
